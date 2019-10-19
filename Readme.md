@@ -1,0 +1,1 @@
+Kompiluj: `make all`
