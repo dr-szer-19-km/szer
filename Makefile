@@ -2,16 +2,17 @@ CXX ?= g++
 
 CXXFLAGS += -Wall -Wextra -Wpedantic
 
-SOURCEZ = main.cpp
+SOURCEZ = main.cpp parser.cpp env.cpp
 OBJECTZ = $(SOURCEZ:.cpp=.o)
 
 .PHONY: all, clean, link, rebuild, OB, SC
 
-OB:
-	echo $(OBJECTZ)
-SC:
-	echo $(SOURCEZ)
 all: $(OBJECTZ) link
+
+OB:
+	@echo $(OBJECTZ)
+SC:
+	@echo $(SOURCEZ)
 
 link:
 	$(CXX) -o szereg.exe $(OBJECTZ) 
