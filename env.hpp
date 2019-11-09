@@ -10,27 +10,38 @@
 #include <vector>
 #include <memory>
 
+using time_task_t = int; 
+
 struct task{
 	int id;
 	int numCores;
-	int timeArrival;
-	int timeExec;
+	time_task_t timeArrival;
+	time_task_t timeExec;
 	
 	task() = default;
-	task(int i, int nc, int ta, int te) :
+	task(int i, int nc, time_task_t ta, time_task_t te) :
 		id(i), numCores(nc), timeArrival(ta), timeExec(te) {}
 };
 
-class env{
-std::vector<std::unique_ptr<task> > tasks;
+class base_env{
 
 public:
 	int numJobs{0};
 	int numCores{0};
 	
-	bool tryAddJob(std::unique_ptr<task>);
-	
+	virtual int tryAddJob(std::unique_ptr<task>) = 0;
 
+};
+
+class env : public base_env{
+	std::vector<std::unique_ptr<task> > tasks;
+
+public:
+	env();
+	int tryAddJob(std::unique_ptr<task>) override;
+	
+	void listJobsByTimeExec();
+	auto & getTaskList() { return tasks; }
 };
 
 #endif

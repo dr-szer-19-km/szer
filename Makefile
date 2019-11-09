@@ -1,8 +1,8 @@
 CXX ?= g++
 
-CXXFLAGS += -Wall -Wextra -Wpedantic
+CXXFLAGS += -Wall -Wextra -Wpedantic -g
 
-SOURCEZ = main.cpp parser.cpp env.cpp
+SOURCEZ = main.cpp parser.cpp env.cpp algo.cpp
 OBJECTZ = $(SOURCEZ:.cpp=.o)
 
 .PHONY: all, clean, link, rebuild, OB, SC

@@ -16,7 +16,7 @@ bool parser::parse(const char* filename)
 {
 	std::ifstream reader(filename);
 	if(!reader){
-		std::cerr<<"B³¹d otwarcia pliku"<<std::endl;
+		std::cerr<<"Error opening file."<<std::endl;
 		return false;
 	}
 	
@@ -38,20 +38,40 @@ bool parser::parse(const char* filename)
 				RED(iss,a);
 				en.numJobs = std::max(en.numJobs, a);
 				std::cout<<"Expecting "<<en.numJobs<<" jobs"<<std::endl;
-				if(en.numJobs > 10000){
+				/*if(en.numJobs > 10000){
 					en.numJobs = 10000;
 					std::cout<<"Warning, truncated job amount to 10000, more jobs will be ignored"<<std::endl;
-				}
+				}*/
 			}
 			  
 		}
 		else{
-			int jnum, ncores, tarr, texc, trash;
+			int jnum, ncores, /*tarr, texc,*/ trash;
+			time_task_t texc, tarr;
 			std::istringstream iss(line);
 			
 			iss>>jnum>>tarr>>trash>>texc>>ncores;
-			if(!en.tryAddJob(std::make_unique<task>(jnum, ncores, tarr, texc)))
-				std::cout<<"Failed to add job (malformed entry), id: "<<jnum<<std::endl;
+			
+			std::cout<<"Parsing: "<<jnum<<std::endl;
+			
+			switch(en.tryAddJob(std::make_unique<task>(jnum, ncores, tarr, texc)))
+			{
+				case 1:
+					std::cout<<"Failed to add job (malformed entry), id: "<<jnum<<std::endl;
+					break;
+				case 2:
+					std::cout<<"Failed to add job (job queue full), id: "<<jnum<<std::endl;
+					break;
+				case 3:
+					std::cout<<"Failed to add job (job requres more cores than max declared), id: "<<jnum<<std::endl;
+					break;
+				case 4:
+					std::cout<<"Failed to add job (job has zero or less exec time), id: "<<jnum<<std::endl;
+					break;
+				case 5:
+					std::cout<<"Failed to add job (job requires zero or less cores), id: "<<jnum<<std::endl;
+					break;
+			}
 			
 		}
 	}
