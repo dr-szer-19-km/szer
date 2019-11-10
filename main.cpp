@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "parser.hpp"
 #include "env.hpp"
 #include "algo.hpp"
@@ -9,13 +10,32 @@
 
 int main(int argc, char * argv[])
 {
+	
+	std::ios_base::sync_with_stdio(false);
+
 	env Master;
 	parser Parser(Master);
-	Parser.parse("Sandia-Ross-2001-1.1-cln.swf");
+	
+	std::string opts;
+	for(int i = 0; i < argc; i++)
+	{
+		if(i)opts += std::string(" ") + argv[i];
+	}
+	std::cout<<opts<<"\n";
+	
+	if(!Parser.parseOpts(opts))
+	{
+		return 1;
+	}
+	if(!Parser.parse())
+	{
+		std::cerr<<"Parser error. Invalid arguments."<<std::endl;
+		return 1;
+	}
 	
 	//Master.listJobsByTimeExec();
 	
-	algo1 Greedy(Master);
+	algo1 Greedy(Master, Parser.getVerbose());
 	
 	std::cout<<"Starting solution generation."<<std::endl;
 	

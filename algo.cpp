@@ -32,9 +32,9 @@ solution algo1::generateSolution()
 	std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool { 
 			return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival : t1->numCores < t2-> numCores); //bitowe mogą być szybsze
 	});
-	std::cout<<"Sorting done.\n";
+	std::cout<<"Sorting done.\n"<<std::endl;
 	
-	//en.listJobsByTimeExec();
+	//if(getVerbose())en.listJobsByTimeExec();
 	
 	while(jobList.size() != 0)
 	{
@@ -88,6 +88,6 @@ solution algo1::generateSolution()
 					}
 	}
 	
-	
+	std::cout<<"Algo done"<<std::endl;
 	out.close();
 }

@@ -1,16 +1,30 @@
 #ifndef _PARSER_HPP_
 #define _PARSER_HPP_
 
+#include <string>
+
 class env;
 
 class parser{
 	protected:
 	env& en;
+	
+	bool verbose{false};
+	unsigned limT{0};
+	std::string fileToOpen{"Sandia-Ross-2001-1.1-cln.swf"};
 
 	public:
 	parser(env&);
 	
-	bool parse(const char*);
+	bool parseOpts(std::string params);
+	
+	bool parse(const char* cc);
+	inline bool parse()
+	{
+		return this->parse(fileToOpen.c_str());
+	}
+	
+	inline bool getVerbose()const {return verbose;}
 };
 
 #endif

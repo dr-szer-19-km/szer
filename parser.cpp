@@ -12,8 +12,46 @@ parser::parser(env& e) : en(e) {}
 int tp; \
 ss>>a;
 
-bool parser::parse(const char* filename)
+bool parser::parseOpts(std::string params)
 {
+	std::istringstream buf(params);
+	std::string i;
+	
+	while(buf >> i)
+	{
+		std::string optsym = i.substr(0,2);
+
+		if(optsym == "-v"){
+			std::cout<<"Verbose output requested. Note that it will drastically prolong execution time.\n";
+			verbose = true;
+		}else if(optsym == "-b"){
+			limT = std::stoi(i.substr(2));
+			std::cout<<"Set maximum allowed tasks to "<<limT<<" \n";
+		}else if(optsym == "-f"){
+			fileToOpen = i.substr(2);
+			std::cout<<"Will read file: "<<fileToOpen<<"\n";
+		}else if(optsym == "-h" || optsym == "--help" || optsym == "h" || optsym == "-help" || optsym == "/?"){
+			std::cout<<"Available switches:\n";
+			std::cout<<"--help\t opens this help\n";
+			std::cout<<"-f[FILENAME]\t opens file to read\n";
+			std::cout<<"-v\t verbose output (but much longer execution and a flood of messages on the console)\n";
+			std::cout<<"-b[LIMIT]\t set upper task limit, and skip further tasks in the input file\n";
+			std::cout<<"\nSample command: szereg.exe -b1000 -fSandia-Ross-cln.swf\n";
+			return false;
+
+		}else{
+			std::cout<<"Unrecogized option. Skipping :"<<i<<"\n";
+		}
+
+	}
+	
+	return true;
+
+}
+
+bool parser::parse(const char* filename /* =fileToOpen */)
+{
+
 	std::ifstream reader(filename);
 	if(!reader){
 		std::cerr<<"Error opening file."<<std::endl;
@@ -39,10 +77,10 @@ bool parser::parse(const char* filename)
 				RED(iss,a);
 				en.numJobs = std::max(en.numJobs, a);
 				std::cout<<"Expecting "<<en.numJobs<<" jobs"<<std::endl;
-				/*if(en.numJobs > 10000){
-					en.numJobs = 10000;
-					std::cout<<"Warning, truncated job amount to 10000, more jobs will be ignored"<<std::endl;
-				}*/
+				if(en.numJobs > limT && limT != 0){
+					en.numJobs = limT;
+					std::cout<<"Warning, truncated job amount to limT value, more jobs will be ignored"<<std::endl;
+				}
 			}
 			  
 		}
@@ -53,24 +91,24 @@ bool parser::parse(const char* filename)
 			
 			iss>>jnum>>tarr>>trash>>texc>>ncores;
 			
-			std::cout<<"Parsing: "<<jnum<<std::endl;
+			if(getVerbose())std::cout<<"Parsing: "<<jnum<<"\n";
 			
 			switch(en.tryAddJob(std::make_unique<task>(jnum, ncores, tarr, texc)))
 			{
 				case 1:
-					std::cout<<"Failed to add job (malformed entry), id: "<<jnum<<std::endl;
+					if(getVerbose())std::cout<<"Failed to add job (malformed entry), id: "<<jnum<<"\n";
 					break;
 				case 2:
-					std::cout<<"Failed to add job (job queue full), id: "<<jnum<<std::endl;
+					if(getVerbose())std::cout<<"Failed to add job (job queue full), id: "<<jnum<<"\n";
 					break;
 				case 3:
-					std::cout<<"Failed to add job (job requres more cores than max declared), id: "<<jnum<<std::endl;
+					if(getVerbose())std::cout<<"Failed to add job (job requres more cores than max declared), id: "<<jnum<<"\n";
 					break;
 				case 4:
-					std::cout<<"Failed to add job (job has zero or less exec time), id: "<<jnum<<std::endl;
+					if(getVerbose())std::cout<<"Failed to add job (job has zero or less exec time), id: "<<jnum<<"\n";
 					break;
 				case 5:
-					std::cout<<"Failed to add job (job requires zero or less cores), id: "<<jnum<<std::endl;
+					if(getVerbose())std::cout<<"Failed to add job (job requires zero or less cores), id: "<<jnum<<"\n";
 					break;
 			}
 			
