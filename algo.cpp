@@ -4,6 +4,7 @@
 #include <fstream>
 #include <set>
 #include <cstdlib>
+#include<iostream>
 
 algo::algo(env& e) : en(e){}
 algo1::algo1(env& e) : algo(e){
@@ -20,19 +21,18 @@ int algo1::calcFreeCores(int when)const
 	}
 	return ret;
 }
-#include<iostream>
-solution algo1::generateSolution()
-{
 
+void algo1::generateSolution()
+{
 	auto & jobList = en.getTaskList();
 	
-	std::ofstream out("output.txt");
+	std::ofstream out(this->outp);
 	
 	std::cout<<"Sorting for greedy...\n";
 	std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool { 
 			return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival : t1->numCores < t2-> numCores); //bitowe mogą być szybsze
 	});
-	std::cout<<"Sorting done.\n"<<std::endl;
+	std::cout<<"Sorting done.\n Please wait until solving is done.\n"<<std::endl;
 	
 	//if(getVerbose())en.listJobsByTimeExec();
 	
@@ -70,11 +70,6 @@ solution algo1::generateSolution()
 			
 			timez.erase(timez.begin()); //nie ma
 		}
-					{
-						//std::cerr<<i->id<<"#";
-						//for(const auto &z : timez)std::cerr<<z<<",";
-						//std::cerr<<"\n";
-					}
 		if(timez.size() == 0) //nie udało się uszeregować.
 		{
 			std::cerr<<"Algo error! (Prosimy Pana dr. Drozdowskiego o łagodny wymiar kary.)"<<std::endl; //zawsze powinno się udać przy obecnej konstrukcji.
@@ -83,9 +78,6 @@ solution algo1::generateSolution()
 		}
 		
 		jobList.erase(jobList.begin());
-					{
-						//std::cerr<<"!!\n";
-					}
 	}
 	
 	std::cout<<"Algo done"<<std::endl;

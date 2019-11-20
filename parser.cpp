@@ -30,9 +30,12 @@ bool parser::parseOpts(std::string params)
 		}else if(optsym == "-f"){
 			fileToOpen = i.substr(2);
 			std::cout<<"Will read file: "<<fileToOpen<<"\n";
-		}else if(optsym == "-h" || optsym == "--help" || optsym == "h" || optsym == "-help" || optsym == "/?"){
+		}else if(optsym == "-o"){
+			fileToWrite = i.substr(2);
+			std::cout<<"Will write to file: "<<fileToOpen<<"\n";
+		}else if(optsym == "-h" || optsym == "h" || optsym == "/?"){
 			std::cout<<"Available switches:\n";
-			std::cout<<"--help\t opens this help\n";
+			std::cout<<"-h\t opens this help\n";
 			std::cout<<"-f[FILENAME]\t opens file to read\n";
 			std::cout<<"-v\t verbose output (but much longer execution and a flood of messages on the console)\n";
 			std::cout<<"-b[LIMIT]\t set upper task limit, and skip further tasks in the input file\n";

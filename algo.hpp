@@ -3,21 +3,18 @@
 
 #include "env.hpp"
 #include <vector>
-
-struct solution{
-
-};
+#include <string>
 
 class algo{
 	protected:
 		env& en;
 		
 		bool verbose{false};
+		std::string outp{"output.txt"};
 		
 	public:
-		//void tune(...);
 		algo(env &);
-		virtual solution generateSolution() = 0;
+		virtual void generateSolution() = 0;
 		
 		inline bool getVerbose()const {return verbose;}
 
@@ -29,13 +26,14 @@ class algo1 : public algo{
 	int calcFreeCores(int when) const;
 	
 	public:
-		algo1(env & e, bool v) : algo1(e)
+		algo1(env & e, bool v, std::string o) : algo1(e)
 		{
 			verbose = v;
+			outp = o;
 		}
 		algo1(env & e);
 		
-		virtual solution generateSolution();
+		void generateSolution() override;
 };
 
 #endif

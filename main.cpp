@@ -33,9 +33,9 @@ int main(int argc, char * argv[])
 		return 1;
 	}
 	
-	//Master.listJobsByTimeExec();
+	if(Parser.getVerbose())Master.listJobsByTimeExec();
 	
-	algo1 Greedy(Master, Parser.getVerbose());
+	algo1 Greedy(Master, Parser.getVerbose(), Parser.getOutputFileName());
 	
 	std::cout<<"Starting solution generation."<<std::endl;
 	

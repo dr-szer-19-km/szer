@@ -12,6 +12,7 @@ class parser{
 	bool verbose{false};
 	unsigned limT{0};
 	std::string fileToOpen{"Sandia-Ross-2001-1.1-cln.swf"};
+	std::string fileToWrite{"output.txt"};
 
 	public:
 	parser(env&);
@@ -25,6 +26,7 @@ class parser{
 	}
 	
 	inline bool getVerbose()const {return verbose;}
+	inline std::string getOutputFileName()const {return fileToWrite;}
 };
 
 #endif

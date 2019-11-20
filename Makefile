@@ -1,6 +1,6 @@
 CXX ?= g++
 
-CXXFLAGS += -Wall -Wextra -Wpedantic -g
+CXXFLAGS += -Wall -Wextra -Wpedantic -std=c++17 -O2
 
 SOURCEZ = main.cpp parser.cpp env.cpp algo.cpp
 OBJECTZ = $(SOURCEZ:.cpp=.o)
