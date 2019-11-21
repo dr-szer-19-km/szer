@@ -2,6 +2,7 @@
 #include "env.hpp"
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -35,10 +36,11 @@ bool parser::parseOpts(std::string params)
 			std::cout<<"Will write to file: "<<fileToOpen<<"\n";
 		}else if(optsym == "-h" || optsym == "h" || optsym == "/?"){
 			std::cout<<"Available switches:\n";
-			std::cout<<"-h\t opens this help\n";
-			std::cout<<"-f[FILENAME]\t opens file to read\n";
-			std::cout<<"-v\t verbose output (but much longer execution and a flood of messages on the console)\n";
-			std::cout<<"-b[LIMIT]\t set upper task limit, and skip further tasks in the input file\n";
+			std::cout<<std::setw(20)<<"-h"<<std::setw(50)<<"opens this help\n";
+			std::cout<<std::setw(20)<<"-f[FILENAME]"<<std::setw(50)<<"opens file to read (input)\n";
+			std::cout<<std::setw(20)<<"-f[FILENAME]"<<std::setw(50)<<"opens file to write (output)\n";
+			std::cout<<std::setw(20)<<"-v"<<std::setw(50)<<"verbose output\n";
+			std::cout<<std::setw(20)<<"-b[LIMIT]"<<std::setw(50)<<"set upper task limit to parse\n";
 			std::cout<<"\nSample command: szereg.exe -b1000 -fSandia-Ross-cln.swf\n";
 			return false;
 
